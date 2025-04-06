@@ -32,9 +32,41 @@ def render_contact_page():
     return render_template('contact.html')
 
 
+
+@app.route('/Login', methods=['POST', 'GET'])
+def render_login_page():
+    if request.method == 'POST':
+        email = request.form.get('user_email').strip().lower()
+        password = request.form.get('user_password')
+        con = connect_database(DATABASE)
+        cur = con.cursor()
+        query = 'SELECT user_fname, user_lname, user_email, user_password FROM users WHERE user_email = ?'
+        cur.execute(query, (email,))
+        results = cur.fetchone()
+        print(results)
+        if password != results[3]:
+            inc_pass1 = True
+            if inc_pass1:
+                print("yolo")
+            return render_template('login.html')
+        con.close()
+        session['logged_in'] = True
+        if session['logged_in'] == True:
+            print("kaboom")
+        session['user_email'] = results[2]
+        session['user_fname'] = results[0]
+        session['user_lname'] = results[1]
+        return redirect('/')
+
+    return render_template('Login.html')
+
+
+
 @app.route('/bookings')
 def render_bookings_page():
     return render_template('bookings.html')
+
+
 
 @app.route('/sign_up', methods=['POST', 'GET'])
 def render_sign_up_page():

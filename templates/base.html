@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>smile | home</title>
+    <title>YSAR | Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"/>
@@ -13,19 +13,24 @@
 <body>
 <nav>
     <div class="container">
-        <div class="navbar-brand">smile.</div>
+        <div class="navbar-brand">YSAR</div>
         <div class="navbar-links">
-            <a href="/">home</a>
-            <a href="/menu">menu</a>
-            <a href="/contact">contact</a>
-            <a href="/bookings">bookings</a>
-            <a href="/sign_up">sign up</a>
+            <a href="/">Home</a>
+            <a href="/menu">Menu</a>
+            <a href="/contact">Contact</a>
+            <a href="/bookings">Bookings</a>
+            <a href="/sign_up">Sign Up</a>
+             {% if session.logged_in %}
+                <a href="/logout">log out</a>
+            {% else %}
+                <a href="/Login">login</a>
+            {% endif %}
         </div>
     </div>
 </nav>
 <div class="container">
     <header>
-        <h1>smile</h1>
+        <h1>YSAR</h1>
         <h2>{% block pageheading %}{% endblock %}</h2>
     </header>
 
