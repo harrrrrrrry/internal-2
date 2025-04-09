@@ -1,12 +1,12 @@
 * {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'JetBrains Mono ExtraBold', sans-serif;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
 body {
-    background-color: rgba(236, 240, 241, 1.0);
+    background-color: rgb(255, 255, 255);
 }
 
 .container {
@@ -40,13 +40,13 @@ h2 {
 }
 
 nav {
-    background-color: rgb(51, 74, 100); /* darkest blue */
+    background-color: rgb(218, 115, 4); /* darkest blue */
     text-align: center;
     /*color: rgba(52, 152, 219, 1.0);!*light blue*!*/
-    font-size: 1.5rem;
-    padding-top: 0.4rem;
-    padding-bottom: 0.7rem;
-    color: rgb(213, 112, 3); /*light blue*/
+    font-size: 2.1rem;
+    padding-top: 0.04rem;
+    padding-bottom: 0.4rem;
+    color: rgb(229, 124, 0); /*light blue*/
 }
 
 .navbar-brand {
@@ -71,11 +71,11 @@ nav a {
 nav a:hover {
     /*color: rgba(44, 62, 80, 1.0); !* darkest blue *!*/
     /*background-color: rgba(52, 152, 219, 1.0); !*light blue*!*/
-    border-bottom: 3px solid rgba(213, 112, 3, 1.0);
+    border-bottom: 3px solid rgb(2, 52, 128);
 }
 
 a, a:visited {
-    color: rgba(213, 112, 3, 1.0);
+    color: rgb(4, 55, 121);
     /*color:hotpink;*/
     text-decoration: none;
 }

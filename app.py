@@ -65,6 +65,11 @@ def render_bookings_page():
     return render_template('bookings.html')
 
 
+@app.route('/logout')
+def render_logout():
+    session.clear()
+    return render_template('home.html')
+
 
 @app.route('/sign_up', methods=['POST', 'GET'])
 def render_sign_up_page():

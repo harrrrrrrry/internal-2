@@ -5,5 +5,40 @@
 {% endblock %}
 
 {% block main %}
-    to be continued
+     <form class='myform' method='post'>
+        <div class="form-group">
+            <div class="form-label"> date:  </div>
+            <div class="form-element"> <input type = 'date' name = "date" required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"> radio </div>
+            <div class="form-element"> <input type = 'checkbox' name = "radio" required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"> GPS </div>
+            <div class="form-element"> <input type = 'checkbox' name = "GPS" required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"> Radio Battery </div>
+            <div class="form-element"> <input type = 'checkbox' name = "radio battery"required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"> Gear Pouch </div>
+            <div class="form-element"> <input type = 'checkbox' name = "gear pouch"required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"> other: </div>
+            <div class="form-element"> <input type = 'text' name = "other"required></div>
+        </div>
+        <div class="form-group">
+            <div class="form-label"></div>
+            <div class="form-element"> <input type = 'submit' value = "signup"></div>
+        </div>
+        {% if pass_len %}
+            {% print("your password can only be between 8 and 30 characters") %}
+        {% endif %}
+        {% if pass_match %}
+            {% print("passwords do not match") %}
+        {% endif %}
+    </form>
 {% endblock %}
