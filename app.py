@@ -6,6 +6,8 @@ DATABASE = "tables_equipment_log"
 inc_pass1 = False
 app = Flask(__name__)
 app.secret_key = 'balls'
+pass_match = False
+pass_len = False
 Bcrypt = Bcrypt(app)
 
 
@@ -44,11 +46,7 @@ def render_login_page():
         cur.execute(query, (email,))
         results = cur.fetchone()
         print(results)
-        if password != results[3]:
-            inc_pass1 = True
-            if inc_pass1:
-                print("yolo")
-            return render_template('login.html')
+
         con.close()
         session['logged_in'] = True
         if session['logged_in'] == True:
@@ -79,13 +77,16 @@ def render_sign_up_page():
 
 
         if user_password != user_password2:
-            return redirect("\signup?error=password+do+not+match")
+            pass_match = True
+            return render_template('sign_up.html', pass_match=pass_match)
 
         if len(user_password) < 8:
-            return redirect("\signup?error=passowrd+to+short+,+atleast+8+required")
+            pass_len = True
+            return render_template('sign_up.html', pass_len=pass_len)
 
         if len(user_password) > 30:
-            return redirect("\signup?error=password+is+too+long+,+30+characters+max")
+            pass_len = True
+            return render_template('sign_up.html', pass_len=pass_len)
         hashed_password = Bcrypt.generate_password_hash(user_password)
         con = connect_database(DATABASE)
         query_insert = "INSERT INTO users (user_fname,user_lname, user_email, user_password ) VALUES(?,?,?,?)"

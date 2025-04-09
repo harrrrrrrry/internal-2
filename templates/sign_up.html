@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block pageheading %}ka-ka-ka-BOOM{% endblock %}
 
 {% block main %}
@@ -28,6 +27,14 @@
             <div class="form-label"></div>
             <div class="form-element"> <input type = 'submit' value = "signup"></div>
         </div>
+        {% if pass_len %}
+            {% print("your password can only be between 8 and 30 characters") %}
+        {% endif %}
+        {% if pass_match %}
+            {% print("passwords do not match") %}
+        {% endif %}
     </form>
+
+
 
 {% endblock %}
