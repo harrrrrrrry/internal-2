@@ -60,8 +60,21 @@ def render_login_page():
 
 
 
-@app.route('/bookings')
+@app.route('/bookings', methods=['POST','GET'])
 def render_bookings_page():
+    if request.method == "POST":
+        date_0 = request.form.get("date_0").title().strip()
+        radio = request.form.get("radio")
+        GPS = request.form.get("GPS")
+        radiobattery = request.form.get("radiobattery")
+        gearpouch = request.form.get("gearpouch")
+        other= request.form.get("other").title().strip()
+        con = connect_database(DATABASE)
+        query_insert = "INSERT INTO booking_table ( date_0 ,radio, GPS, radiobattery, gearpouch, other ) VALUES(?,?,?,?,?,?)"
+        cur = con.cursor()
+        cur.execute(query_insert, (date_0, radio, GPS, radiobattery, gearpouch, other))
+        con.commit()
+        con.close()
     return render_template('bookings.html')
 
 
