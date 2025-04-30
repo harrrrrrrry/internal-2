@@ -4,5 +4,6 @@
 <strong><em>Hello World</em></strong>
 {% endblock %}
 {% block pageheading %}
-    welcome
+    {% if session %}
+         {% print(results[0]) %}
 {% endblock %}

@@ -21,12 +21,31 @@ def connect_database(db_file):
         return
 @app.route('/')
 def render_homepage():
+    results[0]=results[0]
     return render_template('home.html')
 
 
 @app.route('/menu')
 def render_menu_page():
     return render_template('menu.html')
+
+
+
+@app.route('/equipment', methods=['POST','GET'])
+def render_equipment_page():
+    if request.method == "POST":
+        equipment_name = request.form.get("equipment_name")
+        equipment_description = request.form.get("equipment_description")
+        equipment_category = request.form.get("equipment_category")
+        con = connect_database(DATABASE)
+        query_insert = "INSERT INTO equipment ( equipment_name, equipment_description, equipment_category ) VALUES(?,?,?)"
+        cur = con.cursor()
+        cur.execute(query_insert, (equipment_name, equipment_description, equipment_category))
+        con.commit()
+        con.close()
+    return render_template('equipment.html')
+
+
 
 
 @app.route('/contact')
@@ -54,7 +73,8 @@ def render_login_page():
         session['user_email'] = results[2]
         session['user_fname'] = results[0]
         session['user_lname'] = results[1]
-        return redirect('/')
+
+        return redirect('/', results=results)
 
     return render_template('Login.html')
 
@@ -64,16 +84,11 @@ def render_login_page():
 def render_bookings_page():
     if request.method == "POST":
         date_0 = request.form.get("date_0").title().strip()
-        radio = request.form.get("radio")
-        GPS = request.form.get("GPS")
-        radiobattery = request.form.get("radiobattery")
-        gearpouch = request.form.get("gearpouch")
-        other= request.form.get("other").title().strip()
         con = connect_database(DATABASE)
-        query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
-        #query_insert = "INSERT INTO booking_table ( date_0 ,radio, GPS, radiobattery, gearpouch, other ) VALUES(?,?,?,?,?,?)"
+        #saev maybe for later - query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
+        query_insert = "INSERT INTO booking_table ( date_0 ) VALUES(?)"
         cur = con.cursor()
-        cur.execute(query_insert, (date_0, radio, GPS, radiobattery, gearpouch, other))
+        cur.execute(query_insert, (date_0))
         con.commit()
         con.close()
     return render_template('bookings.html')
