@@ -70,7 +70,8 @@ def render_bookings_page():
         gearpouch = request.form.get("gearpouch")
         other= request.form.get("other").title().strip()
         con = connect_database(DATABASE)
-        query_insert = "INSERT INTO booking_table ( date_0 ,radio, GPS, radiobattery, gearpouch, other ) VALUES(?,?,?,?,?,?)"
+        query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
+        #query_insert = "INSERT INTO booking_table ( date_0 ,radio, GPS, radiobattery, gearpouch, other ) VALUES(?,?,?,?,?,?)"
         cur = con.cursor()
         cur.execute(query_insert, (date_0, radio, GPS, radiobattery, gearpouch, other))
         con.commit()
@@ -92,6 +93,7 @@ def render_sign_up_page():
         user_email = request.form.get("user_email").lower().strip()
         user_password = request.form.get("user_password")
         user_password2 = request.form.get("user_password2")
+        user_admin_check = request.form.get("admin_check")
 
 
         if user_password != user_password2:
@@ -107,10 +109,10 @@ def render_sign_up_page():
             return render_template('sign_up.html', pass_len=pass_len)
         hashed_password = Bcrypt.generate_password_hash(user_password)
         con = connect_database(DATABASE)
-        query_insert = "INSERT INTO users (user_fname,user_lname, user_email, user_password ) VALUES(?,?,?,?)"
+        query_insert = "INSERT INTO users (user_fname,user_lname, user_email, user_password, admin_check) VALUES(?,?,?,?,?)"
         print('flagged thing kaboom')
         cur = con.cursor()
-        cur.execute(query_insert,(user_fname, user_lname ,user_email ,hashed_password))
+        cur.execute(query_insert,(user_fname, user_lname ,user_email ,hashed_password, user_admin_check))
         con.commit()
         con.close()
     return render_template('sign_up.html')
