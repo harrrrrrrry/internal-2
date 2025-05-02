@@ -9,6 +9,7 @@ app.secret_key = 'balls'
 pass_match = False
 pass_len = False
 Bcrypt = Bcrypt(app)
+results = ['user']
 
 
 
@@ -61,20 +62,28 @@ def render_login_page():
         password = request.form.get('user_password')
         con = connect_database(DATABASE)
         cur = con.cursor()
-        query = 'SELECT user_fname, user_lname, user_email, user_password FROM users WHERE user_email = ?'
+        query = 'SELECT user_id, user_fname, user_password FROM users WHERE user_email = ?'
         cur.execute(query, (email,))
+
+
         results = cur.fetchone()
         print(results)
 
         con.close()
-        session['logged_in'] = True
-        if session['logged_in'] == True:
-            print("kaboom")
+        try:
+            user_id = results[0]
+            user_fname = results[1]
+            user_password = results[2]
+        except IndexError:
+            return redirect("/login?wrong+email+or+password")
+        if not Bcrypt.check_password_hash(user_password, password):
+            return redirect("/login?wrong+email+or+password")
+
         session['user_email'] = results[2]
         session['user_fname'] = results[0]
         session['user_lname'] = results[1]
-
-        return redirect('/', results=results)
+        print(session)
+        return redirect('/')
 
     return render_template('Login.html')
 
@@ -125,7 +134,6 @@ def render_sign_up_page():
         hashed_password = Bcrypt.generate_password_hash(user_password)
         con = connect_database(DATABASE)
         query_insert = "INSERT INTO users (user_fname,user_lname, user_email, user_password, admin_check) VALUES(?,?,?,?,?)"
-        print('flagged thing kaboom')
         cur = con.cursor()
         cur.execute(query_insert,(user_fname, user_lname ,user_email ,hashed_password, user_admin_check))
         con.commit()

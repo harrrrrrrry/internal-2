@@ -10,15 +10,26 @@
             <div class="form-label"> date:  </div>
             <div class="form-element"> <input type = 'date' name = "date_0" required></div>
         </div>
+         <div class="form-group">
+            <div class="form-label"> date:  </div>
+            <div class="form-element"> <input type = 'checkbox' name = "radio" required></div>
+        </div>
+         <div class="form-group">
+            <div class="form-label"> date:  </div>
+            <div class="form-element"> <input type = 'checkbox' name = "radio_batter" required></div>
+        </div>
+         <div class="form-group">
+            <div class="form-label"> date:  </div>
+            <div class="form-element"> <input type = 'checkbox' name = "radio_pouch" required></div>
+        </div>
+         <div class="form-group">
+            <div class="form-label"> date:  </div>
+            <div class="form-element"> <input type = 'checkbox' name = "GPS" required></div>
+        </div>
         <div class="form-group">
             <div class="form-label"></div>
             <div class="form-element"> <input type = 'submit' value = "signup"></div>
         </div>
-        {% if pass_len %}
-            {% print("your password can only be between 8 and 30 characters") %}
-        {% endif %}
-        {% if pass_match %}
-            {% print("passwords do not match") %}
         {% endif %}
     </form>
 {% endblock %}
