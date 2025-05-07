@@ -51,7 +51,15 @@ def render_equipment_page():
 
 @app.route('/contact')
 def render_contact_page():
-    return render_template('contact.html')
+    headers = ('who', 'what', 'when')
+    con = connect_database(DATABASE)
+    query = "SELECT equipment_name, equipment_description, equipment_category FROM equipment"
+    cur = con.cursor()
+    cur.execute(query)
+    equipment = cur.fetchall()
+
+    con.commit()
+    return render_template('contact.html', header=headers, equipment0=equipment)
 
 
 
@@ -62,10 +70,8 @@ def render_login_page():
         password = request.form.get('user_password')
         con = connect_database(DATABASE)
         cur = con.cursor()
-        query = 'SELECT user_id, user_fname, user_password FROM users WHERE user_email = ?'
+        query = 'SELECT user_id, user_fname, user_password, admin_check FROM users WHERE user_email = ?'
         cur.execute(query, (email,))
-
-
         results = cur.fetchone()
         print(results)
 
@@ -74,6 +80,7 @@ def render_login_page():
             user_id = results[0]
             user_fname = results[1]
             user_password = results[2]
+            user_admin_check = results[3]
         except IndexError:
             return redirect("/login?wrong+email+or+password")
         if not Bcrypt.check_password_hash(user_password, password):
@@ -82,9 +89,10 @@ def render_login_page():
         session['user_email'] = results[2]
         session['user_fname'] = results[0]
         session['user_lname'] = results[1]
+        session['user_admin_check'] = results[3]
         print(session)
         return redirect('/')
-
+        return
     return render_template('Login.html')
 
 
@@ -118,7 +126,6 @@ def render_sign_up_page():
         user_password = request.form.get("user_password")
         user_password2 = request.form.get("user_password2")
         user_admin_check = request.form.get("admin_check")
-
 
         if user_password != user_password2:
             pass_match = True

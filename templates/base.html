@@ -18,8 +18,10 @@
             <a href="/">Home</a>
             <a href="/menu">Time Table</a>
             <a href="/contact">Contact</a>
-            <a href="/bookings">Bookings</a>
-            <a href="/equipment">Equipment</a>
+            {% if session['user_admin_check'] %}
+                <a href="/bookings">Bookings</a>
+                <a href="/equipment">Equipment</a>
+            {% endif %}
             <a href="/sign_up">Sign Up</a>
              {% if session.logged_in %}
                 <a href="/logout">log out</a>

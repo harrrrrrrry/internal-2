@@ -169,6 +169,8 @@ a, a:visited {
 
 table {
     border-collapse: collapse;
+    width:50%;
+    position: absolute;
 }
 
 .cart-table > thead {
@@ -201,4 +203,10 @@ table {
     .product-box {
         width: 100%;
     }
+}
+
+td,tr{
+    border:1px solid black;
+    padding:0.3rem;
+    text-align: center;
 }

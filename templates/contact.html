@@ -3,3 +3,31 @@
 {% block pageheading %}
 contact
 {% endblock %}
+{% block main %}
+    <table>
+    <thead>
+    <tr>
+        {% for head in header %}
+        <td>
+            {{ head }}
+        </td>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in equipment0 %}
+    <tr>
+        <td>
+            {{ row[0] }}
+        </td>
+        <td>
+            {{ row[1] }}
+        </td>
+        <td>
+            {{ row[2] }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
