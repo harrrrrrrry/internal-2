@@ -72,6 +72,10 @@ nav a:hover {
     /*color: rgba(44, 62, 80, 1.0); !* darkest blue *!*/
     /*background-color: rgba(52, 152, 219, 1.0); !*light blue*!*/
     border-bottom: 3px solid rgb(2, 52, 128);
+    color: #022f75;
+    font-weight: bold;
+    font-size: 1.7rem;
+    transition: 0.3s;
 }
 
 a, a:visited {

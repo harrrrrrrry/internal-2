@@ -10,6 +10,7 @@ pass_match = False
 pass_len = False
 Bcrypt = Bcrypt(app)
 results = ['user']
+logged_in = False
 
 
 
@@ -49,11 +50,11 @@ def render_equipment_page():
 
 
 
-@app.route('/contact')
+@app.route('/inventory')
 def render_contact_page():
-    headers = ('who', 'what', 'when')
+    headers = ('equipment', 'description', 'number', 'equipment_id')
     con = connect_database(DATABASE)
-    query = "SELECT equipment_name, equipment_description, equipment_category FROM equipment"
+    query = "SELECT equipment_name, equipment_description, equipment_category, Equipment_id FROM equipment"
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
@@ -76,6 +77,9 @@ def render_login_page():
         print(results)
 
         con.close()
+        session['logged_in'] = True
+        if session['logged_in'] == True:
+            print("kaboom")
         try:
             user_id = results[0]
             user_fname = results[1]
@@ -91,8 +95,9 @@ def render_login_page():
         session['user_lname'] = results[1]
         session['user_admin_check'] = results[3]
         print(session)
+
         return redirect('/')
-        return
+
     return render_template('Login.html')
 
 
@@ -114,6 +119,7 @@ def render_bookings_page():
 @app.route('/logout')
 def render_logout():
     session.clear()
+    Logged_in = False
     return render_template('home.html')
 
 
