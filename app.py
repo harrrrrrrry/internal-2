@@ -11,6 +11,7 @@ pass_len = False
 Bcrypt = Bcrypt(app)
 results = ['user']
 logged_in = False
+wrong_id = False
 
 
 
@@ -50,17 +51,43 @@ def render_equipment_page():
 
 
 
-@app.route('/inventory')
+@app.route('/inventory', methods= ['POST', 'GET'])
 def render_contact_page():
-    headers = ('equipment', 'description', 'number', 'equipment_id')
+    headers = ('equipment', 'description', 'equipment_id')
     con = connect_database(DATABASE)
-    query = "SELECT equipment_name, equipment_description, equipment_category, Equipment_id FROM equipment"
+    query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
-
+    wrong_id="banana"
+    equipment_id = None
     con.commit()
-    return render_template('contact.html', header=headers, equipment0=equipment)
+    if request.method == "POST":
+        equipment_id = request.form.get('equipment_id')
+        date_0 = request.form.get("date_0")
+        user_id=session['user_id']
+
+        con = connect_database(DATABASE)
+        query = 'SELECT equipment_id FROM equipment WHERE equipment_id = ?'
+        cur.execute(query, (equipment_id))
+        john=cur.fetchall()
+        oliverlivingstone=john[0][0]
+        print(oliverlivingstone)
+        print(equipment_id)
+        if oliverlivingstone == equipment:
+            print("olli brepple")
+        if str(oliverlivingstone) != str(equipment_id) :
+            wrong_id = "apple"
+
+        else:
+            query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
+            cur = con.cursor()
+            cur.execute(query_insert, (date_0, user_id, equipment_id))
+            con.commit()
+            con.close()
+            wrong_id="banana"
+        print(wrong_id)
+    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id)
 
 
 
@@ -90,9 +117,9 @@ def render_login_page():
         if not Bcrypt.check_password_hash(user_password, password):
             return redirect("/login?wrong+email+or+password")
 
-        session['user_email'] = results[2]
-        session['user_fname'] = results[0]
-        session['user_lname'] = results[1]
+        session['user_password'] = results[2]
+        session['user_id'] = results[0]
+        session['user_fname'] = results[1]
         session['user_admin_check'] = results[3]
         print(session)
 
@@ -106,11 +133,12 @@ def render_login_page():
 def render_bookings_page():
     if request.method == "POST":
         date_0 = request.form.get("date_0").title().strip()
+        user_id=session['user_id']
         con = connect_database(DATABASE)
         #saev maybe for later - query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
-        query_insert = "INSERT INTO booking_table ( date_0 ) VALUES(?)"
+        query_insert = "INSERT INTO booking_table ( date_0, user_id ) VALUES(?, ?)"
         cur = con.cursor()
-        cur.execute(query_insert, (date_0))
+        cur.execute(query_insert, (date_0, user_id))
         con.commit()
         con.close()
     return render_template('bookings.html')
