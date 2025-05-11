@@ -12,6 +12,7 @@ Bcrypt = Bcrypt(app)
 results = ['user']
 logged_in = False
 wrong_id = False
+inventory_size = 10
 
 
 
@@ -59,35 +60,25 @@ def render_contact_page():
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
-    wrong_id="banana"
     equipment_id = None
     con.commit()
+
     if request.method == "POST":
         equipment_id = request.form.get('equipment_id')
         date_0 = request.form.get("date_0")
         user_id=session['user_id']
-
         con = connect_database(DATABASE)
         query = 'SELECT equipment_id FROM equipment WHERE equipment_id = ?'
+        print(equipment_id)
         cur.execute(query, (equipment_id))
         john=cur.fetchall()
-        oliverlivingstone=john[0][0]
-        print(oliverlivingstone)
-        print(equipment_id)
-        if oliverlivingstone == equipment:
-            print("olli brepple")
-        if str(oliverlivingstone) != str(equipment_id) :
-            wrong_id = "apple"
+        query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
+        cur = con.cursor()
+        cur.execute(query_insert, (date_0, user_id, equipment_id))
+        con.commit()
+        con.close()
 
-        else:
-            query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
-            cur = con.cursor()
-            cur.execute(query_insert, (date_0, user_id, equipment_id))
-            con.commit()
-            con.close()
-            wrong_id="banana"
-        print(wrong_id)
-    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id)
+    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id, inventory_size=inventory_size)
 
 
 
