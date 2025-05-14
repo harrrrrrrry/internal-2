@@ -5,6 +5,32 @@ Time Table
 {% endblock %}
 
 {% block main %}
-    <strong><em></em></strong>
+    <br>
+    <div>
 
+    </div>
+    <table>
+    <thead>
+    <tr>
+        {% for head in header %}
+        <td>
+            {{ head }}
+        </td>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in timetable_info0 %}
+    <tr>
+        <td>
+            {{ row[0] }}
+        </td>
+        <td>
+            {{ row[1] }}
+        </td>
+        <td>
+            {{ row[2] }}
+        </td>
+    </tr>
+    {% endfor %}
 {% endblock %}

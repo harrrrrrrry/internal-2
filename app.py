@@ -31,7 +31,14 @@ def render_homepage():
 
 @app.route('/menu')
 def render_menu_page():
-    return render_template('menu.html')
+    headers = ('Who', 'When', 'What')
+    con = connect_database(DATABASE)
+    query = "SELECT user_id, date_0, equipment_id FROM booking_table"
+    cur = con.cursor()
+    cur.execute(query)
+    timetable_info = cur.fetchall()
+    con.commit()
+    return render_template('menu.html', header=headers, timetable_info0=timetable_info)
 
 
 
@@ -94,7 +101,7 @@ def render_contact_page():
         con.commit()
         con.close()
 
-    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id, inventory_size=inventory_size)
+    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id, number_awesome=number_awesome)
 
 
 
