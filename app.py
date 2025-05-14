@@ -54,14 +54,30 @@ def render_equipment_page():
 
 @app.route('/inventory', methods= ['POST', 'GET'])
 def render_contact_page():
+
     headers = ('equipment', 'description', 'equipment_id')
+
     con = connect_database(DATABASE)
+
     query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
     equipment_id = None
     con.commit()
+
+
+    con = connect_database(DATABASE)
+    query = "SELECT * FROM equipment "
+    cur = con.cursor()
+    cur.execute(query,)
+    number0 = cur.fetchall()
+    print(number0)
+    number_awesome = len(number0)
+    print(number_awesome)
+
+
+
 
     if request.method == "POST":
         equipment_id = request.form.get('equipment_id')
