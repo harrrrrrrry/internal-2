@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block pageheading %}
+Time Table
+{% endblock %}
+
+{% block main %}
+      <br>
+    <div>
+
+    </div>
+    <table>
+    <thead>
+    <tr>
+        {% for head in header %}
+        <td>
+            {{ head }}
+        </td>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in equipment0 %}
+    <tr>
+        <td>
+            {{ row[0] }}
+        </td>
+        <td>
+            {{ row[1] }}
+        </td>
+        <td>
+            {{ row[2] }}
+        </td>
+        <td>
+            <form action="{{ url_for('render_remove_equipment_page') }}" method="POST">
+                <input type="hidden" name="equipment_id" value="{{ row[2] }}">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

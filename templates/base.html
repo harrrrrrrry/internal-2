@@ -19,11 +19,11 @@
             <a href="/menu">Time Table</a>
 
             {% if session['user_admin_check'] %}
+                <a href="/adminpage">Inventory</a>
                 <a href="/equipment">Equipment</a>
             {% endif %}
              {% if session.logged_in %}
-                 <a href="/inventory">inventory</a>
-                 <a href="/bookings">Booking</a>
+                 <a href="/inventory">Booking Equipment</a>
                 <a href="/logout">log out</a>
             {% else %}
                 <a href="/Login">login</a>

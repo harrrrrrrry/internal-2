@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
+
 DATABASE = "tables_equipment_log"
 inc_pass1 = False
 app = Flask(__name__)
@@ -15,7 +16,6 @@ wrong_id = False
 inventory_size = 10
 
 
-
 def connect_database(db_file):
     try:
         connection = sqlite3.connect(db_file)
@@ -23,10 +23,49 @@ def connect_database(db_file):
     except Error as e:
         print(e)
         return
+
+
 @app.route('/')
 def render_homepage():
-    results[0]=results[0]
+    results[0] = results[0]
     return render_template('home.html')
+
+
+@app.route('/adminpage', methods=['GET', 'POST'])
+def render_adminpage_page():
+    headers = ('equipment', 'description', 'equipment_id', 'delete')
+
+    con = connect_database(DATABASE)
+
+    query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
+    cur = con.cursor()
+    cur.execute(query)
+    equipment = cur.fetchall()
+    con.commit()
+
+
+    if request.method == 'POST':
+        con = connect_database(DATABASE)
+        cur.concursor(con)
+        query = 'DELETE FROM equipment WHERE equipment_id=?'
+        cur.execute(query,)
+
+    return render_template('adminpage.html',equipment_id=equipment_id, header=headers, equipment0=equipment, incorrect_id=wrong_id,)
+
+
+@app.route('/remove_eqipment', methods=['GET', 'POST'])
+def render_remove_equipment_page():
+    equipment_id = request.form.get['equipment_id']
+    if request.method == 'POST':
+        con = connect_database(DATABASE)
+        cur = con.cursor()
+        query = "DELETE FROM equipment WHERE equipment_id=?"
+        cur.execute(query,(equipment_id,))
+
+
+
+
+
 
 
 @app.route('/menu')
@@ -41,8 +80,7 @@ def render_menu_page():
     return render_template('menu.html', header=headers, timetable_info0=timetable_info)
 
 
-
-@app.route('/equipment', methods=['POST','GET'])
+@app.route('/equipment', methods=['POST', 'GET'])
 def render_equipment_page():
     if request.method == "POST":
         equipment_name = request.form.get("equipment_name")
@@ -57,11 +95,8 @@ def render_equipment_page():
     return render_template('equipment.html')
 
 
-
-
-@app.route('/inventory', methods= ['POST', 'GET'])
+@app.route('/inventory', methods=['POST', 'GET'])
 def render_contact_page():
-
     headers = ('equipment', 'description', 'equipment_id')
 
     con = connect_database(DATABASE)
@@ -73,36 +108,32 @@ def render_contact_page():
     equipment_id = None
     con.commit()
 
-
     con = connect_database(DATABASE)
     query = "SELECT * FROM equipment "
     cur = con.cursor()
-    cur.execute(query,)
+    cur.execute(query, )
     number0 = cur.fetchall()
     print(number0)
     number_awesome = len(number0)
     print(number_awesome)
 
-
-
-
     if request.method == "POST":
         equipment_id = request.form.get('equipment_id')
         date_0 = request.form.get("date_0")
-        user_id=session['user_id']
+        user_id = session['user_id']
         con = connect_database(DATABASE)
         query = 'SELECT equipment_id FROM equipment WHERE equipment_id = ?'
         print(equipment_id)
         cur.execute(query, (equipment_id))
-        john=cur.fetchall()
+        john = cur.fetchall()
         query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
         cur = con.cursor()
         cur.execute(query_insert, (date_0, user_id, equipment_id))
         con.commit()
         con.close()
 
-    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id, number_awesome=number_awesome)
-
+    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id,
+                           number_awesome=number_awesome)
 
 
 @app.route('/Login', methods=['POST', 'GET'])
@@ -142,14 +173,13 @@ def render_login_page():
     return render_template('Login.html')
 
 
-
-@app.route('/bookings', methods=['POST','GET'])
+@app.route('/bookings', methods=['POST', 'GET'])
 def render_bookings_page():
     if request.method == "POST":
         date_0 = request.form.get("date_0").title().strip()
-        user_id=session['user_id']
+        user_id = session['user_id']
         con = connect_database(DATABASE)
-        #saev maybe for later - query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
+        # saev maybe for later - query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
         query_insert = "INSERT INTO booking_table ( date_0, user_id ) VALUES(?, ?)"
         cur = con.cursor()
         cur.execute(query_insert, (date_0, user_id))
@@ -190,7 +220,7 @@ def render_sign_up_page():
         con = connect_database(DATABASE)
         query_insert = "INSERT INTO users (user_fname,user_lname, user_email, user_password, admin_check) VALUES(?,?,?,?,?)"
         cur = con.cursor()
-        cur.execute(query_insert,(user_fname, user_lname ,user_email ,hashed_password, user_admin_check))
+        cur.execute(query_insert, (user_fname, user_lname, user_email, hashed_password, user_admin_check))
         con.commit()
         con.close()
     return render_template('sign_up.html')
