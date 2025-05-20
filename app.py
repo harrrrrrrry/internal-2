@@ -68,7 +68,19 @@ def render_remove_equipment_page():
 
 
 
-#@app.route('userprofile', methods=['GET', 'POST'])
+@app.route('/userprofile', methods=['GET', 'POST'])
+def render_userprofile_page():
+    if request.method == 'POST':
+        user_fname = request.form.get('user_fname')
+        user_lname = request.form.get('user_lname')
+        con = connect_database(DATABASE)
+        user_id = session['user_id']
+        query_update = "UPDATE users SET user_fname = ?, user_lname = ? WHERE user_id = ?"
+        cur = con.cursor()
+        cur.execute(query_update, (user_fname, user_lname, user_id))
+        con.commit()
+        con.close()
+    return render_template("userprofile.html")
 
 
 
