@@ -50,20 +50,25 @@ def render_adminpage_page():
         query = 'DELETE FROM equipment WHERE equipment_id=?'
         cur.execute(query,)
 
-    return render_template('adminpage.html',equipment_id=equipment_id, header=headers, equipment0=equipment, incorrect_id=wrong_id,)
+    return render_template('adminpage.html',equipment_id=equipment, header=headers, equipment0=equipment, incorrect_id=wrong_id,)
 
 
 @app.route('/remove_eqipment', methods=['GET', 'POST'])
 def render_remove_equipment_page():
-    equipment_id = request.form.get['equipment_id']
+    equipment_id = request.form.get('equipment_id')
     if request.method == 'POST':
         con = connect_database(DATABASE)
         cur = con.cursor()
         query = "DELETE FROM equipment WHERE equipment_id=?"
         cur.execute(query,(equipment_id,))
+        con.commit()
+        con.close()
+
+    return render_template("adminpage.html")
 
 
 
+#@app.route('userprofile', methods=['GET', 'POST'])
 
 
 
@@ -72,9 +77,9 @@ def render_remove_equipment_page():
 def render_menu_page():
     headers = ('Who', 'When', 'What')
     con = connect_database(DATABASE)
-    query = "SELECT user_id, date_0, equipment_id FROM booking_table"
+    query = "SELECT users.user_fname, booking_table.date_0, equipment.equipment_name, equipment.equipment_description FROM booking_table JOIN users ON users.user_id=booking_table.user_id JOIN equipment ON equipment.equipment_id=booking_table.equipment_id"
     cur = con.cursor()
-    cur.execute(query)
+    cur.execute(query,)
     timetable_info = cur.fetchall()
     con.commit()
     return render_template('menu.html', header=headers, timetable_info0=timetable_info)
