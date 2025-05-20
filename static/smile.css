@@ -29,12 +29,12 @@ img {
 h1 {
     text-align: center;
     font-weight: 200;
-    font-size: 4rem;
+    font-size: 2rem;
     margin: 0;
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 1rem;
     text-align: center;
     margin: 0 0 0.5rem 0;
 }
@@ -43,7 +43,7 @@ nav {
     background-color: rgb(218, 115, 4); /* darkest blue */
     text-align: center;
     /*color: rgba(52, 152, 219, 1.0);!*light blue*!*/
-    font-size: 2.1rem;
+    font-size: 1.5rem;
     padding-top: 0.04rem;
     padding-bottom: 0.4rem;
     color: rgb(229, 124, 0); /*light blue*/
@@ -62,7 +62,7 @@ nav {
 nav a {
     /*margin:0 0.5rem;*/
     padding: 0 0.5rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 
     /*border: 1px solid rgba(52, 152, 219, 1.0);*/
     /*border-radius:0.5rem;*/
@@ -74,7 +74,7 @@ nav a:hover {
     border-bottom: 3px solid rgb(2, 52, 128);
     color: #022f75;
     font-weight: bold;
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     transition: 0.3s;
 }
 

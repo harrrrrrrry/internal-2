@@ -102,11 +102,10 @@ def render_equipment_page():
     if request.method == "POST":
         equipment_name = request.form.get("equipment_name")
         equipment_description = request.form.get("equipment_description")
-        equipment_category = request.form.get("equipment_category")
         con = connect_database(DATABASE)
-        query_insert = "INSERT INTO equipment ( equipment_name, equipment_description, equipment_category ) VALUES(?,?,?)"
+        query_insert = "INSERT INTO equipment ( equipment_name, equipment_description ) VALUES(?,?)"
         cur = con.cursor()
-        cur.execute(query_insert, (equipment_name, equipment_description, equipment_category))
+        cur.execute(query_insert, (equipment_name, equipment_description))
         con.commit()
         con.close()
     return render_template('equipment.html')
@@ -122,35 +121,37 @@ def render_contact_page():
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
-    equipment_id = None
     con.commit()
 
     con = connect_database(DATABASE)
-    query = "SELECT * FROM equipment "
+    query = "SELECT equipment_name FROM equipment "
     cur = con.cursor()
     cur.execute(query, )
     number0 = cur.fetchall()
-    print(number0)
-    number_awesome = len(number0)
-    print(number_awesome)
 
     if request.method == "POST":
-        equipment_id = request.form.get('equipment_id')
+        equipment_id = request.form.get('equipment').strip()
         date_0 = request.form.get("date_0")
         user_id = session['user_id']
-        con = connect_database(DATABASE)
-        query = 'SELECT equipment_id FROM equipment WHERE equipment_id = ?'
         print(equipment_id)
-        cur.execute(query, (equipment_id))
-        john = cur.fetchall()
+        con = connect_database(DATABASE)
+        cur = con.cursor()
+        query = 'SELECT equipment_name, equipment_id FROM equipment WHERE equipment_id = ?'
+
+        cur.execute(query, (equipment_id,))
+        equipment_id0 = cur.fetchone()
+        print(equipment_id0)
+
+
+
         query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
         cur = con.cursor()
-        cur.execute(query_insert, (date_0, user_id, equipment_id))
+        cur.execute(query_insert, (date_0, user_id, equipment_id0))
         con.commit()
         con.close()
 
-    return render_template('contact.html', header=headers, equipment0=equipment, incorrect_id=wrong_id,
-                           number_awesome=number_awesome)
+    return render_template('contact.html', header=headers, equipment0=equipment,
+                           number_awesome=number0)
 
 
 @app.route('/Login', methods=['POST', 'GET'])

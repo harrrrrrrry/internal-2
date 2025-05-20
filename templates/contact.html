@@ -55,10 +55,16 @@ contact
             <div class="form-label"> date:  </div>
             <div class="form-element"> <input type = 'date' name = "date_0" required></div>
         </div>
-                <div class="form-group">
-            <div class="form-label"> equipment number:  </div>
-            <div class="form-element"> <input type = 'number' min="1" max= {{ number_awesome }} name="equipment_id" required></div>
-                </div>
+            <label for="equipment">Choose one piece of equipment:</label>
+
+                <select name="equipment" required>
+                    {% for equipment in number_awesome %}
+                        <option value="{{ equipment[0] }}">{{ equipment[0] }}</option>
+                    {% endfor %}
+                    {% print %}
+
+                    </select>
+
         <div class="form-group">
             <div class="form-label"></div>
             <div class="form-element"> <input type = 'submit' value = "signup"></div>
