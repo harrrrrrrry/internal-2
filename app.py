@@ -6,7 +6,6 @@ from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
 DATABASE = "tables_equipment_log"
-inc_pass1 = False
 app = Flask(__name__)
 app.secret_key = 'balls'
 pass_match = False
@@ -44,6 +43,13 @@ def render_adminpage_page():
     equipment = cur.fetchall()
     con.commit()
 
+    con = connect_database(DATABASE)
+    query = "SELECT user_id, date_0, booking_id, equipment_id FROM booking_table"
+    cur = con.cursor()
+    cur.execute(query)
+    booking = cur.fetchall()
+    con.commit()
+
 
     if request.method == 'POST':
         con = connect_database(DATABASE)
@@ -51,17 +57,30 @@ def render_adminpage_page():
         query = 'DELETE FROM equipment WHERE equipment_id=?'
         cur.execute(query,)
 
+        con = connect_database(DATABASE)
+        cur.concursor(con)
+        query = 'DELETE FROM booking WHERE booking_table=?'
+        cur.execute(query, )
+
     return render_template('adminpage.html',equipment_id=equipment, header=headers, equipment0=equipment, incorrect_id=wrong_id,)
 
 
 @app.route('/remove_eqipment', methods=['GET', 'POST'])
 def render_remove_equipment_page():
     equipment_id = request.form.get('equipment_id')
+    booking_id = request.form.get('bookin_id')
     if request.method == 'POST':
         con = connect_database(DATABASE)
         cur = con.cursor()
         query = "DELETE FROM equipment WHERE equipment_id=?"
         cur.execute(query,(equipment_id,))
+        con.commit()
+        con.close()
+
+        con = connect_database(DATABASE)
+        cur = con.cursor()
+        query = "DELETE FROM booking_table WHERE equipment_id=?"
+        cur.execute(query, (booking_id,))
         con.commit()
         con.close()
 
@@ -162,13 +181,12 @@ def render_login_page():
         query = 'SELECT user_id, user_fname, user_password, admin_check FROM users WHERE user_email = ?'
         cur.execute(query, (email,))
         results = cur.fetchone()
-        if results == None:
-            print("results are none")
         con.close()
-        session['logged_in'] = True
-        if session['logged_in'] == True:
+        if results == None:
             wrong_pass = True
             return render_template('Login.html', wrong_pass=wrong_pass)
+            print("results are none")
+
         try:
             user_id = results[0]
             user_fname = results[1]
@@ -179,6 +197,14 @@ def render_login_page():
             session['user_fname'] = results[1]
             session['user_admin_check'] = results[3]
             print(session)
+            if not Bcrypt.check_password_hash(user_password, password):
+                wrong_pass = True
+                print("wrong password")
+                session['logged_in'] = False
+                session['user_admin_check'] = False
+                return render_template('Login.html', wrong_pass=wrong_pass)
+            print("here")
+            session['logged_in'] = True
             return redirect('/')
         except TypeError:
             print("error putting in password")
@@ -187,26 +213,8 @@ def render_login_page():
         except IndexError:
             wrong_pass = True
             return render_template('Login.html', wrong_pass=wrong_pass)
-        if not Bcrypt.check_password_hash(user_password, password):
-            wrong_pass = True
-            return render_template('Login.html', wrong_pass=wrong_pass)
 
     return render_template('Login.html')
-
-
-@app.route('/bookings', methods=['POST', 'GET'])
-def render_bookings_page():
-    if request.method == "POST":
-        date_0 = request.form.get("date_0").title().strip()
-        user_id = session['user_id']
-        con = connect_database(DATABASE)
-        # saev maybe for later - query = 'SELECT user_id, user_fname, user_lname FROM users INNER JOIN booking_table ON bookings_table.user_id = users.user_id'
-        query_insert = "INSERT INTO booking_table ( date_0, user_id ) VALUES(?, ?)"
-        cur = con.cursor()
-        cur.execute(query_insert, (date_0, user_id))
-        con.commit()
-        con.close()
-    return render_template('bookings.html')
 
 
 @app.route('/logout')
