@@ -14,7 +14,7 @@ Bcrypt = Bcrypt(app)
 results = ['user']
 logged_in = False
 wrong_id = False
-inventory_size = 10
+
 
 
 def connect_database(db_file):
@@ -24,12 +24,14 @@ def connect_database(db_file):
     except Error as e:
         print(e)
         return
+    #this function is so that the database is linked to this python script and we can fiddle with at we please
 
 
 @app.route('/')
 def render_homepage():
     user_name = session.get('user_fname')
     return render_template('home.html', user_name=user_name)
+# reders hompage, when teh user signs in it prints thier name and welcome text
 
 
 
@@ -37,42 +39,29 @@ def render_homepage():
 def render_adminpage_page():
     headers = ('equipment', 'description', 'equipment_id', 'delete')
     con = connect_database(DATABASE)
-    query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
+    query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment" # this block deletes a piece of euipment by querying and getting al the teh information from teh equipment row that is selected in the equipmentHTML
     cur = con.cursor()
     cur.execute(query)
     equipment = cur.fetchall()
     con.commit()
 
     con = connect_database(DATABASE)
-    query = "SELECT user_id, date_0, booking_id, equipment_id FROM booking_table"
+    query = "SELECT user_id, date_0, booking_id, equipment_id FROM booking_table" # this block deletes all the bookings acociated with this piece of equipment, if the booking wanst deleted, it would cause many errors such as, the IDs would overlap causeing bookings to never be deletes and show up fro other piece of quipment of the other ID
     cur = con.cursor()
     cur.execute(query)
     booking = cur.fetchall()
     con.commit()
 
-
-    if request.method == 'POST':
-        con = connect_database(DATABASE)
-        cur.concursor(con)
-        query = 'DELETE FROM equipment WHERE equipment_id=?'
-        cur.execute(query,)
-
-        con = connect_database(DATABASE)
-        cur.concursor(con)
-        query = 'DELETE FROM booking WHERE booking_table=?'
-        cur.execute(query, )
-
     return render_template('adminpage.html',equipment_id=equipment, header=headers, equipment0=equipment, incorrect_id=wrong_id,)
-
+ # this function handles delteing and showing all the inventory that YSAR owns, we need to be abel to delte piece of equipment as often items like the reapeter or printers break. we want to display it so the admins know what we have in stock.
 
 @app.route('/remove_eqipment', methods=['GET', 'POST'])
 def render_remove_equipment_page():
-    equipment_id = request.form.get('equipment_id')
-    booking_id = request.form.get('bookin_id')
+    equipment_id = request.form.get('equipment_id') #gets the id of the row we want to delete
     if request.method == 'POST':
         con = connect_database(DATABASE)
         cur = con.cursor()
-        query = "DELETE FROM equipment WHERE equipment_id=?"
+        query = "DELETE FROM equipment WHERE equipment_id=?" # gets the
         cur.execute(query,(equipment_id,))
         con.commit()
         con.close()
@@ -80,7 +69,7 @@ def render_remove_equipment_page():
         con = connect_database(DATABASE)
         cur = con.cursor()
         query = "DELETE FROM booking_table WHERE equipment_id=?"
-        cur.execute(query, (booking_id,))
+        cur.execute(query, (equipment_id,))
         con.commit()
         con.close()
 
