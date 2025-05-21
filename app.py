@@ -1,3 +1,5 @@
+from operator import index
+
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from sqlite3 import Error
@@ -27,16 +29,15 @@ def connect_database(db_file):
 
 @app.route('/')
 def render_homepage():
-    results[0] = results[0]
-    return render_template('home.html')
+    user_name = session.get('user_fname')
+    return render_template('home.html', user_name=user_name)
+
 
 
 @app.route('/adminpage', methods=['GET', 'POST'])
 def render_adminpage_page():
     headers = ('equipment', 'description', 'equipment_id', 'delete')
-
     con = connect_database(DATABASE)
-
     query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
     cur = con.cursor()
     cur.execute(query)
@@ -71,8 +72,8 @@ def render_remove_equipment_page():
 @app.route('/userprofile', methods=['GET', 'POST'])
 def render_userprofile_page():
     if request.method == 'POST':
-        user_fname = request.form.get('user_fname')
-        user_lname = request.form.get('user_lname')
+        user_fname = request.form.get('user_fname').title().strip()
+        user_lname = request.form.get('user_lname').title().strip()
         con = connect_database(DATABASE)
         user_id = session['user_id']
         query_update = "UPDATE users SET user_fname = ?, user_lname = ? WHERE user_id = ?"
@@ -81,8 +82,6 @@ def render_userprofile_page():
         con.commit()
         con.close()
     return render_template("userprofile.html")
-
-
 
 
 @app.route('/menu')
@@ -136,17 +135,16 @@ def render_contact_page():
         print(equipment_id)
         con = connect_database(DATABASE)
         cur = con.cursor()
-        query = 'SELECT equipment_name, equipment_id FROM equipment WHERE equipment_id = ?'
-
+        query = 'SELECT equipment_id FROM equipment WHERE equipment_name = ?'
         cur.execute(query, (equipment_id,))
         equipment_id0 = cur.fetchone()
-        print(equipment_id0)
+        print(equipment_id0[0])
 
 
 
         query_insert = "INSERT INTO booking_table ( date_0, user_id, equipment_id ) VALUES(?, ?, ?)"
         cur = con.cursor()
-        cur.execute(query_insert, (date_0, user_id, equipment_id0))
+        cur.execute(query_insert, (date_0, user_id, equipment_id0[0]))
         con.commit()
         con.close()
 
@@ -164,29 +162,34 @@ def render_login_page():
         query = 'SELECT user_id, user_fname, user_password, admin_check FROM users WHERE user_email = ?'
         cur.execute(query, (email,))
         results = cur.fetchone()
-        print(results)
-
+        if results == None:
+            print("results are none")
         con.close()
         session['logged_in'] = True
         if session['logged_in'] == True:
-            print("kaboom")
+            wrong_pass = True
+            return render_template('Login.html', wrong_pass=wrong_pass)
         try:
             user_id = results[0]
             user_fname = results[1]
             user_password = results[2]
             user_admin_check = results[3]
+            session['user_password'] = results[2]
+            session['user_id'] = results[0]
+            session['user_fname'] = results[1]
+            session['user_admin_check'] = results[3]
+            print(session)
+            return redirect('/')
+        except TypeError:
+            print("error putting in password")
+            wrong_pass = True
+            return render_template('Login.html', wrong_pass=wrong_pass)
         except IndexError:
-            return redirect("/login?wrong+email+or+password")
+            wrong_pass = True
+            return render_template('Login.html', wrong_pass=wrong_pass)
         if not Bcrypt.check_password_hash(user_password, password):
-            return redirect("/login?wrong+email+or+password")
-
-        session['user_password'] = results[2]
-        session['user_id'] = results[0]
-        session['user_fname'] = results[1]
-        session['user_admin_check'] = results[3]
-        print(session)
-
-        return redirect('/')
+            wrong_pass = True
+            return render_template('Login.html', wrong_pass=wrong_pass)
 
     return render_template('Login.html')
 

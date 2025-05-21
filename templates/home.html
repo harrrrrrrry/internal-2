@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block main %}
-
-
-<strong><em>Hello World</em></strong>
-{% endblock %}
-{% block pageheading %}
+    {% if session.user_id %}
+        <p>Welcome {{user_name}}</p>
+    {% else %}
+        <P>please sign in</P>
+    {% endif %}
 
 {% endblock %}
