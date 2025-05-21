@@ -35,7 +35,7 @@ Time Table
             <form action="{{ url_for('render_remove_equipment_page') }}" method="POST">
                 <input type="hidden" name="equipment_id" value="{{ row[2] }}">
                 <input type="hidden" name="booking_id" value="{{ row[2] }}">
-                <button type="submit">delete</button>
+                <button type="submit">delete</button>  <!-- this code block is very funky but is like it, --->
             </form>
         </td>
     </tr>
