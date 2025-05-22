@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block pageheading %}
-Time Table
+
 {% endblock %}
 
 {% block main %}
@@ -12,7 +12,7 @@ Time Table
     <table>
     <thead>
     <tr>
-        {% for head in header %}
+        {% for head in header %} <!--- makes a table to display all the equipment in the equipment table--->
         <td>
             {{ head }}
         </td>
@@ -35,7 +35,7 @@ Time Table
             <form action="{{ url_for('render_remove_equipment_page') }}" method="POST">
                 <input type="hidden" name="equipment_id" value="{{ row[2] }}">
                 <input type="hidden" name="booking_id" value="{{ row[2] }}">
-                <button type="submit">delete</button>  <!-- this code block is very funky but is like it, --->
+                <button type="submit">delete</button>  <!-- this code block is very funky but is like it, it gets the ID of the equipment row the user selected incase they want to delete it --->
             </form>
         </td>
     </tr>

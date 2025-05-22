@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 {% block main %}
-    {% if session.user_id %}
+    <br>
+    <br>
+    <br>
+    <br>
+    {% if session.user_id %} <!--- displays welcome to the uses name if signed in--->
         <p>Welcome {{user_name}}</p>
     {% else %}
-        <P>please sign in</P>
+        <p>please sign in</p>
     {% endif %}
-
+    <br>
+    <br>
+    <pr><P>The purpose of YSAR Trust is to train and prepare the next generation of Search and Rescue (SAR) and Emergency Management (EM) practitioners. With a primary emphasis on skill development, community service principles, and authentic outdoor education, we have become a recognized entity in the SAR and EM sector since our establishment in 2005.</P></pr>
+    <br>
+    <br>
+    <pr>The purpose of this website is so that students can book piece of YSAR equipment for the weekend NAVEX's, if you have any troubles please contat your instructors.</pr>
 {% endblock %}
+ <!---this HTML is wat the users see when they first lad into the webpage, it displays either please sign in or welcome your name depending on if youve signed in or not,
+  it gets the information via a variable sent to home in the python script--->

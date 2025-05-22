@@ -1,4 +1,4 @@
-# Required modules
+# modules
 from operator import index  #  This import is unused and can be removed
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
@@ -8,19 +8,18 @@ from flask_bcrypt import Bcrypt
 # Database file
 DATABASE = "tables_equipment_log"
 
-# Flask app setup
+# flask app setup
 app = Flask(__name__)
-app.secret_key = 'balls'  #  For session encryption. Consider changing to a secure key.
+app.secret_key = 'excellence!'  #  for session encryption
 Bcrypt = Bcrypt(app)
 
 # Flags and global state
 pass_match = False
 pass_len = False
-results = ['user']  #  Unused in the current context
 logged_in = False
 wrong_id = False
 
-# Function to connect to SQLite database
+# function to connect to sqlite database
 def connect_database(db_file):
     try:
         connection = sqlite3.connect(db_file)
@@ -28,20 +27,20 @@ def connect_database(db_file):
     except Error as e:
         print(e)
         return
-    #  Connects to the SQLite DB and returns the connection
+    #  Connects to the sqlite DB and returns the connection
 
-# Home page route
+# home page route
 @app.route('/')
 def render_homepage():
     user_name = session.get('user_fname')  #  Fetches user's name from session
     return render_template('home.html', user_name=user_name)
 
-# Admin page route
+# admin page route
 @app.route('/adminpage', methods=['GET', 'POST'])
 def render_adminpage_page():
     headers = ('equipment', 'description', 'equipment_id', 'delete')
 
-    # Fetch all equipment records
+    # Fetch all equpment records
     con = connect_database(DATABASE)
     query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
     cur = con.cursor()
@@ -49,7 +48,7 @@ def render_adminpage_page():
     equipment = cur.fetchall()
     con.commit()
 
-    # Fetch all booking records
+    # fetch all booking records
     con = connect_database(DATABASE)
     query = "SELECT user_id, date_0, booking_id, equipment_id FROM booking_table"
     cur = con.cursor()
@@ -59,13 +58,15 @@ def render_adminpage_page():
 
     return render_template('adminpage.html', equipment_id=equipment, header=headers, equipment0=equipment, incorrect_id=wrong_id)
 
+
+
 # Route to handle equipment deletion
 @app.route('/remove_eqipment', methods=['GET', 'POST'])
 def render_remove_equipment_page():
     equipment_id = request.form.get('equipment_id')  #  ID of equipment to delete
 
     if request.method == 'POST':
-        # Delete equipment
+        # Delete equipment, using a query from the second html
         con = connect_database(DATABASE)
         cur = con.cursor()
         query = "DELETE FROM equipment WHERE equipment_id=?"
@@ -87,7 +88,7 @@ def render_remove_equipment_page():
 @app.route('/userprofile', methods=['GET', 'POST'])
 def render_userprofile_page():
     if request.method == 'POST':
-        # Update user's first and last name
+        # Update user's first and last name, gets infromation from the html, then it updtae sht tabels and the session will update
         user_fname = request.form.get('user_fname').title().strip()
         user_lname = request.form.get('user_lname').title().strip()
         con = connect_database(DATABASE)
@@ -130,16 +131,9 @@ def render_equipment_page():
 # Inventory view and booking submission
 @app.route('/inventory', methods=['POST', 'GET'])
 def render_contact_page():
-    headers = ('equipment', 'description', 'equipment_id')
-    con = connect_database(DATABASE)
+
 
     # Get all equipment info
-    query = "SELECT equipment_name, equipment_description, Equipment_id FROM equipment"
-    cur = con.cursor()
-    cur.execute(query)
-    equipment = cur.fetchall()
-    con.commit()
-
     # Get equipment names only
     con = connect_database(DATABASE)
     query = "SELECT equipment_name FROM equipment"
@@ -166,7 +160,7 @@ def render_contact_page():
         con.commit()
         con.close()
 
-    return render_template('contact.html', header=headers, equipment0=equipment, number_awesome=number0)
+    return render_template('contact.html', number_awesome=number0)
 
 # Login page and authentication
 @app.route('/Login', methods=['POST', 'GET'])

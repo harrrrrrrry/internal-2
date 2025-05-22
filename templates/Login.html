@@ -22,12 +22,12 @@
             {% if wrong_pass %}
                 {% print("wrong email or password") %}
             {% endif %}
-        </div>
+        </div>  <!--- this code block is responsible for creatign a form that the user can write their emial, that requires an @ sybol, and a password that is type password making it invisable, then when they submit the information can be accesd in the python script  --->
 
     </form>
     <br>
     <br>
     <br>
     <br>
-    <p> Don't have an account? <a href="/sign_up">sign up :)</a> </p>
+    <p> Don't have an account? <a href="/sign_up">sign up :)</a> </p><!--- directs you to make an account if you dont have one --->
 {% endblock %}

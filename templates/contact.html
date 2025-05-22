@@ -1,65 +1,24 @@
 {% extends 'base.html' %}
 
 {% block pageheading %}
-contact
 {% endblock %}
 {% block main %}
     <br>
-    <div>
-
-    </div>
-    <table>
-    <thead>
-    <tr>
-        {% for head in header %}
-        <td>
-            {{ head }}
-        </td>
-        {% endfor %}
-    </tr>
-    </thead>
-    <tbody>
-    {% for row in equipment0 %}
-    <tr>
-        <td>
-            {{ row[0] }}
-        </td>
-        <td>
-            {{ row[1] }}
-        </td>
-        <td>
-            {{ row[2] }}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-    </table>
     <br>
-    <br>
-    <br>
-
-    <br><br>
-    <br>
-    <br><br>
-    <br>
-    <br>
-    <br><br>
-    <br>
-
-    {% if incorrect_id == "apple" %}
-        {% print 'please use a vaild equipment number' %}
-    {% endif %}
-
      <form class='myform' method='post'>
+     <br>
         <div class="form-group">
-            <div class="form-label"> date:  </div>
+            <br>
+            <div class="form-label"> date:  </div>  <!--- creates form so the user can book equipment, the type date makes it so the user will select a date instead of writting a text for example--->
+            <br>
             <div class="form-element"> <input type = 'date' name = "date_0" required></div>
+            <br>
         </div>
             <label for="equipment">Choose one piece of equipment:</label>
 
                 <select name="equipment" required>
                     {% for equipment in number_awesome %}
-                        <option value="{{ equipment[0] }}">{{ equipment[0] }}</option>
+                        <option value="{{ equipment[0] }}">{{ equipment[0] }}</option>  <!--- this block creates a drop down box contianing all the piece of equipemnt--->
                     {% endfor %}
                     {% print %}
 
@@ -67,7 +26,7 @@ contact
 
         <div class="form-group">
             <div class="form-label"></div>
-            <div class="form-element"> <input type = 'submit' value = "signup"></div>
+            <div class="form-element"> <input type = 'submit' value = "submit"></div> <!--- hti block create the submti button and posts all the infomration back to the python script--->
         </div>
     </form>
 {% endblock %}

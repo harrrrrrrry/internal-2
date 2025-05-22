@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>YSAR | Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--- links css file to the htmls, thats the reason why all the other htmls have extent ase hmtl in them. --->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"/>
     <link href="{{ url_for('static', filename='smile.css') }}" rel="stylesheet">
@@ -18,12 +18,12 @@
             <a href="/">Home</a>
             <a href="/menu">Time Table</a>
 
-            {% if session['user_admin_check'] %}
+            {% if session['user_admin_check'] %} <!--- if user logged in and is an admin then it will display these pages, if not then it wont, its getting htis information from app.py --->
                 <a href="/adminpage">Inventory</a>
                 <a href="/equipment">Equipment</a>
             {% endif %}
-             {% if session.logged_in %}
-                 <a href="/userprofile">edit name</a>
+             {% if session.logged_in %} <!--- if logged in then show these pages and let you acess then--->
+                 <a href="/userprofile">Edit name</a>
                  <a href="/inventory">Booking Equipment</a>
                 <a href="/logout">log out</a>
             {% else %}
@@ -49,4 +49,4 @@
 </div>
 </body>
 
-</html>
+</html> <!--- in base html all the other html's pull off this one becuase this one is connected to the css and has all the intofrmation about the link sat the top of the page--->

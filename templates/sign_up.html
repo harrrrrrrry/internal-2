@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block pageheading %}ka-ka-ka-BOOM{% endblock %}
+{% block pageheading %}{% endblock %}
 
 {% block main %}
     <form class='myform' method='post'>
@@ -37,7 +37,9 @@
             {% print("passwords do not match") %}
         {% endif %}
     </form>
-
+<!--- this code block is the signup form, it requires the users to put in a text for their name
+ and put in a email that requires n @ symbol for their email. put in a last name text, and then
+ password and confirm password, the information is then passed into app.py to be processed and put into the database--->
 
 
 {% endblock %}
